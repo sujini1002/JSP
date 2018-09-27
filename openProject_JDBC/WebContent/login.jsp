@@ -1,3 +1,5 @@
+
+
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.ResultSet"%>
@@ -30,9 +32,12 @@
 
 		if (rs.next() && rs.getString(2).equals(pw)) {
 			//로그인 성공(세션에 저장)
-			loginForm loginMember = new loginForm(rs.getString(1),rs.getString(3),rs.getString(4));
+			
+			loginForm loginMember = new loginForm(rs.getString(1), rs.getString(3), rs.getString(4));
 			request.getSession(false).setAttribute("loginMember", loginMember);
-			response.sendRedirect("mypage.jsp");
+			response.sendRedirect(request.getContextPath() + "/mypage/mypage.jsp");
+
+			
 		} else {
 %>
 <!DOCTYPE>
