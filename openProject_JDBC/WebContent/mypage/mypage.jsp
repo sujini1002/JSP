@@ -18,10 +18,11 @@
  	background-size:100%;
  	width :150px;
  	height:150px;
- 	border : 1px solid #DDDDDD;
+ 	border : 5px solid #000000;
  	border-radius: 75px;
  	margin :10px
  }
+ 
 </style>
 </head>
 <body>
@@ -29,7 +30,7 @@
 <div id="contents">
 <h2>회원정보</h2>
 <div id="memberPhoto">
-<img src="<%=request.getContextPath() %>/images/${loginMember.userImg}">
+<img src="<%=request.getContextPath() %>/uploadFile/${loginMember.userImg}">
 </div>
 <hr>
         <table>

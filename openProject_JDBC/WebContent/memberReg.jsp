@@ -15,6 +15,7 @@
  	<%
  		String fileName = "";
  		String fName = "";
+ 		String id = "";
  		Connection conn=null;
  		PreparedStatement pstmt = null;
  		int resultCnt = 0;
@@ -41,6 +42,7 @@
 					if(!item.isFormField()){
 						String Iname = item.getFieldName();
 						 fName = item.getName();
+						 fName += id; 
 						String contentType = item.getContentType(); // 파일 타입 확인
 						boolean isInMemory = item.isInMemory();//메모리 존재 여부 확인
 						long fileSize = item.getSize();//파일 크기
@@ -52,6 +54,7 @@
 						if(fileSize>0){
 						String uploadUri = "/images";
 						String dir = request.getSession(false).getServletContext().getRealPath(uploadUri);
+						System.out.println(dir);
 						//파일저장
 						item.write(new File(dir,fName));
 						pstmt.setString(4,fName);
@@ -59,6 +62,7 @@
 						
 					}else{
 						pstmt.setString(i, item.getString("utf-8"));
+						if(i==1){id=item.getString("utf-8");}
 					}
 					i++;
 				}
