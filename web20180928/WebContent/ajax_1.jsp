@@ -52,7 +52,7 @@
 			 });
 			 
 		}); */
-		/*  $.ajax({
+		  $.ajax({
 			url : 'dataxml.jsp',
 			success : function(data){
 				$(data).find('product').each(function(){
@@ -61,8 +61,9 @@
 					var htmlstr = '<h1>'+name+' : '+price+'원</h1>'
 					$('body').append(htmlstr);
 				});
+				
 			}
-		 }); */
+		 }); 
 
 		/*  var data = {
 			name : 'cool',
