@@ -90,7 +90,7 @@
 					var content = '<div class="bAddr">'
 							+ '<span class="title">법정동 주소정보</span>'
 							+ detailAddr + '</div>';
-
+							console.log(content);
 					// 마커를 클릭한 위치에 표시합니다 
 					marker.setPosition(mouseEvent.latLng);
 					marker.setMap(map);

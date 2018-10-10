@@ -5,8 +5,7 @@
 <head>
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1e0a111ce3956b96d4feac576beb420c&libraries=services,clusterer,drawing"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1e0a111ce3956b96d4feac576beb420c&libraries=services,clusterer,drawing"></script>
     <title>주소로 장소 표시하기</title>
 
 </head>
@@ -20,7 +19,7 @@
 <input type="text" id="sample5_address" placeholder="주소">
 <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색">
 <input type="button" onclick="find()" value="찾기">
-<input type="button" onclick="route()" value="최단환승">
+<input type="button" onclick="route()" value="최소환승">
 <br>
 <div id="map"
      style="width: 800px; height: 500px; margin-top: 10px; display: none"></div>
@@ -30,12 +29,12 @@
 <script>
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 
-        mapOption = {
-            center : new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level : 3
-            // 지도의 확대 레벨
-        };
-
+    mapOption = {
+        center : new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        level : 3
+        // 지도의 확대 레벨
+    };
+ 
     // 지도를 생성합니다
     var map = new daum.maps.Map(mapContainer, mapOption);
 
@@ -141,11 +140,11 @@
                         }
                     });
                 }
-            }).open();
+            }
+            ).open();
     }
 
-
-
+	
     function find(){
         if(coordsArray.length != 2){
             alert("주소가 두개가 아님");
@@ -163,7 +162,7 @@
             var newPosLat = ((y1 + y2) / 2).toFixed(4);
             console.log(newPosLat);
             var newPosLng = ((x1 + x2) / 2).toFixed(4);
-
+			
 
             geocoder.transCoord(newPosLng, newPosLat, transCoordCB, {
                 input_coord: daum.maps.services.Coords.WGS84, // 변환을 위해 입력한 좌표계 입니다
@@ -189,7 +188,6 @@
                 coordsX[2]);//x
 
             coordsArray.push(newLocation);
-
             console.log(coordsArray);
 
             // 새 마커를 구합니다.
@@ -215,10 +213,7 @@
     }
 
 
-function searchDetailAddrFromCoords(coords, callback) {
-	// 좌표로 법정동 상세 주소 정보를 요청합니다
-	geocoder.coord2Address(coords.ib, coords.jb, callback);
-}
+
     //
     // 좌표 변환 결과를 받아서 처리할 콜백함수 입니다.
     function transCoordCB(result, status) {
@@ -253,6 +248,7 @@ function searchDetailAddrFromCoords(coords, callback) {
         var title = ''; // 제목
         var title2 = '';// 제목2
         var htmlstr2 = '';
+        
         console.log(coordsArray);
         console.log(coordsArray[0].ib);
         console.log(coordsArray[0].jb);
@@ -270,15 +266,15 @@ function searchDetailAddrFromCoords(coords, callback) {
                 + coordsY[2], //중간위치
             success : function(data) {
                 var firstLo = null;
-                /* $(data).find('msgHeader').each(function(){
+                var wifiSta = 
+                 $(data).find('msgHeader').each(function(){
                    var headerCd = $(this).find('headerCd').text();
                    var headerMsg = $(this).find('headerMsg').text();
                    htmlstr += headerCd+" : "+headerMsg;
-                }); */
+                }); 
                 $(data).find('itemList').each(function(){
                     var tmp_title = '';
                     index = index+1;
-                    console.log(index);
                     if(index<2){
                         $(data).find('pathList').each(function(){
 
@@ -287,27 +283,23 @@ function searchDetailAddrFromCoords(coords, callback) {
                             var routeNm = $(this).find('routeNm').text();
                             var tid = $(this).find('tid').text();
                             var tname = $(this).find('tname').text();
+                            
                             if(firstLo == null){
                                 firstLo = fname;
+                                wifi(fname);
+                                wifi(tname);
                                 title='<h1>'+fname+'→'+tname + '</h1>';
                                 tmp_title= '<h1>'+fname+'→';
-                                htmlstr += '<h5> 탑승지 id: '+ fid +'&nbsp;'
-                                    +'탑승지 명: '+ fname +'&nbsp;'
-                                    +' 지하철: '+ routeNm +'&nbsp;'
-                                    +' 하차지 ID : '+ tid +'&nbsp;'
-                                    +'하차지명 : '+ tname +'</h5>';
-                                console.log(firstLo);
+                                //함수호출
+                                htmlstr += printRoute(fid,fname,routeNm,tid,tname);
                             }
                             else if(fname == firstLo){
                                 return false;
                             }else{
+                            	wifi(tname);
                                 title = tmp_title+tname + '</h1>';
-                                htmlstr += '<h4>환승</h4>';
-                                htmlstr += '<h5> 환승 id: '+ fid +'&nbsp;'
-                                    +'환승역 : '+ fname +'&nbsp;'
-                                    +' 환승할 지하철: '+ routeNm +'&nbsp;'
-                                    +' 하차지 ID : '+ tid +'&nbsp;'
-                                    +'하차지명 : '+ tname +'</h5>';
+                                //함수호출
+                                htmlstr += twoPrintRoute(fid,fname,routeNm,tid,tname);
                             }
 
                         });
@@ -338,7 +330,7 @@ function searchDetailAddrFromCoords(coords, callback) {
                  $(data).find('msgHeader').each(function(){
                    var headerCd = $(this).find('headerCd').text();
                    var headerMsg = $(this).find('headerMsg').text();
-                   htmlstr += headerCd+" : "+headerMsg;
+                   htmlstr2 += headerCd+" : "+headerMsg;
                 }); 
                 $(data).find('itemList').each(function(){
                     var tmp_title = '';
@@ -350,27 +342,24 @@ function searchDetailAddrFromCoords(coords, callback) {
                             var routeNm = $(this).find('routeNm').text();
                             var tid = $(this).find('tid').text();
                             var tname = $(this).find('tname').text();
+                            
+                            
                             if(firstLo == null){
+                            	wifi(fname);
+                            	wifi(tname);
                                 firstLo = fname;
                                 title2='<h1>'+fname+'→'+tname + '</h1>';
-                                tmp_title= '<h1>'+fname+'→';
-                                htmlstr2 += '<h5> 탑승지 id: '+ fid +'&nbsp;'
-                                    +'탑승지 명: '+ fname +'&nbsp;'
-                                    +' 지하철: '+ routeNm +'&nbsp;'
-                                    +' 하차지 ID : '+ tid +'&nbsp;'
-                                    +'하차지명 : '+ tname +'</h5>';
-                                console.log(firstLo);
+                                 tmp_title= '<h1>'+fname+'→';
+                              	//함수호출
+                                htmlstr2 += printRoute(fid,fname,routeNm,tid,tname);
                             }
                             else if(fname == firstLo){
                                 return false;
                             }else{
+                            	wifi(tname);
                                 title2 = tmp_title+tname + '</h1>';
-                                htmlstr2 += '<h4>환승</h4>'
-                                    +'<h5> 환승역 id: '+ fid +'&nbsp;'
-                                    +'환승역명: '+ fname +'&nbsp;'
-                                    +'환승할 지하철: '+ routeNm +'&nbsp;'
-                                    +'하차지 ID : '+ tid +'&nbsp;'
-                                    +'하차지명 : '+ tname +'</h5>';
+                                //함수호출
+                                htmlstr2 += twoPrintRoute(fid,fname,routeNm,tid,tname);
                             }
 
                         });
@@ -386,11 +375,73 @@ function searchDetailAddrFromCoords(coords, callback) {
                 alert("error");
             }
         });
-        coordsY=[];
-        coordsX=[];
+        /* coordsY=[];
+        coordsX=[]; */ 
 
     }//end of function
-
+    function printRoute(fid,fname,routeNm,tid,tname){
+    	return '<h5> 탑승지 id: '+ fid +'&nbsp;'
+        +'탑승지 명: '+ fname +'&nbsp;'
+        +' 지하철: '+ routeNm +'&nbsp;';
+        +' 하차지 ID : '+ tid +'&nbsp;'
+        +'하차지명 : '+ tname +'</h5>'
+        
+    }
+    function twoPrintRoute(fid,fname,routeNm,tid,tname){
+    	return '<h4>환승</h4>'
+        +'<h5> 환승역 id: '+ fid +'&nbsp;'
+        +'환승역명: '+ fname +'&nbsp;'
+        +'환승할 지하철: '+ routeNm +'&nbsp;'
+        +'하차지 ID : '+ tid +'&nbsp;'
+        +'하차지명 : '+ tname +'</h5>';
+    }
+     function wifi(fname){
+    	 fname = fname.substring(0,fname.length-1);
+    	var servicekey = "667849734474676932356563715066";
+    	
+		$.ajax({
+			url : 'http://swopenAPI.seoul.go.kr/api/subway/'+servicekey+'/xml/stationWifi/0/150/'+fname,
+			success : function(data){
+				var company = null;
+				var htmlstr = '';
+				var cnt = 0;
+				console.log(data);
+				$(data).find('row').each(function(){
+					var statnNm = $(this).find('statnNm').text(); //지하철역 명
+					var subwayNm = $(this).find('subwayNm').text(); //지하철 명
+					var telecomSsid = $(this).find('telecomSsid').text(); //Ssid 등록 통신사
+					var signalStrength =  $(this).find('signalStrength').text(); //신호 세기
+					if(company == null){
+						htmlstr += '<h4>'+statnNm+'</h4>';
+						htmlstr += printWifi(statnNm,subwayNm,telecomSsid,signalStrength);
+						company = telecomSsid.substring(0,1);
+						console.log("company == null일때 :  "+company);
+						cnt++;
+					}else if(company != telecomSsid.substring(0,1) ){
+						htmlstr += printWifi(statnNm,subwayNm,telecomSsid,signalStrength);
+						company = telecomSsid.substring(0,1);
+						console.log("company != telecomSsid : "+company);
+						cnt++;
+					}
+					if(cnt ==3){
+						return false;
+					}
+					
+				});
+				$('body').append(htmlstr);
+			},
+		 error : function(){alert("error");}
+		});//end ajax
+		
+	} 
+     function printWifi(statnNm,subwayNm,telecomSsid,signalStrength){
+    		return '<h5>'
+    		 +'지하철 호선 : ' + subwayNm + '&nbsp;'
+    		 +'통신사 : ' + telecomSsid + '&nbsp;'
+    		 +'신호세기 : ' + signalStrength + '&nbsp;'
+    		 +'</h5>';
+    }
+	
 </script>
 </body>
 </html>

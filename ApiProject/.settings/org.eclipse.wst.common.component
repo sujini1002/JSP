@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="APIProject">
+    <wb-module deploy-name="ApiProject">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="APIProject"/>
-        <property name="java-output-path" value="/APIProject/build/classes"/>
+        <property name="context-root" value="ApiProject"/>
+        <property name="java-output-path" value="/ApiProject/build/classes"/>
     </wb-module>
 </project-modules>

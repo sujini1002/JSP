@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1e0a111ce3956b96d4feac576beb420c&libraries=services,clusterer,drawing"></script>
 <title>주소로 장소 표시하기</title>
@@ -201,8 +201,8 @@
 					status){
 				console.log("result"+result[0]);
 				if (status === daum.maps.services.Status.OK) {
-					var detailAddr =result[0].road_address.address_name ;
-					detailAddr += result[0].address.address_name;
+					var detailAddr = '<div>지번 주소 : '
+						+ result[0].address.address_name + '</div>';
 					console.log(detailAddr);
 				}//end if
 			});
